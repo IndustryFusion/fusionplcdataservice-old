@@ -18,15 +18,15 @@ package io.fusion.fusionplcdataservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ComponentScan("io.fusion")
 @EnableScheduling
+@PropertySource("classpath:default.yaml")
 public class FusionPlcDataServiceApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(FusionPlcDataServiceApplication.class, args);
     }
-
 }

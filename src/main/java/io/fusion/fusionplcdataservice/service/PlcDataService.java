@@ -79,8 +79,11 @@ public class PlcDataService implements MetricsPullService {
 
             // Convert the result into a data structure Industry Fusion can understand.
             for (String fieldName : readResponse.getFieldNames()) {
-                if (readResponse.getResponseCode(fieldName) == PlcResponseCode.OK) {
+                var responseCode = readResponse.getResponseCode(fieldName);
+                if (responseCode == PlcResponseCode.OK) {
                     data.put(fieldName, readResponse.getObject(fieldName).toString());
+                } else {
+                    log.warn("Plc response for field {}: {}",fieldName, responseCode);
                 }
             }
         } catch (JobNotFoundException e) {
