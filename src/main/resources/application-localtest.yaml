@@ -1,0 +1,48 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+server:
+  error:
+    include-stacktrace: never
+
+fusiondataservice:
+  name: Filteranlage
+  connectionString: simulated://127.0.0.1
+  downstreamServiceBaseUrl: http://localhost:9999/
+  dataServiceType: PULL
+  autorun: true
+  jobSpecs:
+    betriebsdaten:
+      period: 2000
+      fields:
+        - source: "RANDOM/Abreinig_Offline:INT"
+          alias: Abreinig_Offline
+          target: Abreinig_Offline
+        - source: "RANDOM/Opt_Venti_Stoerung:BOOL"
+          alias: Opt_Venti_Stoerung
+          target: Opt_Venti_Stoerung
+        - source: "RANDOM/Opt_Betriebsdruck:BOOL"
+          alias: Opt_Betriebsdruck
+          target: Opt_Betriebsdruck
+        - source: "RANDOM/Opt_Betriebsdruck_Stoe:BOOL"
+          alias: Opt_Betriebsdruck_Stoe
+          target: Opt_Betriebsdruck_Stoe
+    statusdaten:
+      period: 2000
+      fields:
+        - source: "RANDOM/Wng_FVS_Max_Wasser:BOOL"
+          alias: Wng_FVS_Max_Wasser
+          target: Wng_FVS_Max_Wasser
+        - source: "RANDOM/Wng_FVS_Max_Zeit:BOOL"
+          alias: Wng_FVS_Max_Zeit
+          target: Wng_FVS_Max_Zeit
