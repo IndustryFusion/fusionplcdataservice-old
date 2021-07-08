@@ -27,7 +27,7 @@ under the License.
     <artifactId>fusionplcdataservice</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>fusionplcdataservice</name>
-    <description>Fusion Gateway Application to fetcn predefined data from PLCs</description>
+    <description>Fusion Gateway Application to fetch predefined data from PLCs</description>
 
     <properties>
         <plc4j.version>0.8.0</plc4j.version>
