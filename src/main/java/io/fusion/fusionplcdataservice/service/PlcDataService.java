@@ -15,8 +15,8 @@
 
 package io.fusion.fusionplcdataservice.service;
 
-import io.fusion.core.FusionDataServiceConfig;
-import io.fusion.core.FusionDataServiceConfig.FieldSpec;
+import io.fusion.core.config.FusionDataServiceConfig;
+import io.fusion.core.config.FusionDataServiceConfig.FieldSpec;
 import io.fusion.core.exception.ConnectionException;
 import io.fusion.core.exception.JobNotFoundException;
 import io.fusion.core.exception.ReadException;
@@ -83,7 +83,7 @@ public class PlcDataService implements MetricsPullService {
                 if (responseCode == PlcResponseCode.OK) {
                     data.put(fieldName, readResponse.getObject(fieldName).toString());
                 } else {
-                    log.warn("Plc response for field {}: {}",fieldName, responseCode);
+                    log.warn("Plc response for field {}: {}", fieldName, responseCode);
                 }
             }
         } catch (JobNotFoundException e) {
