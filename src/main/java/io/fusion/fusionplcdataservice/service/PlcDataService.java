@@ -17,10 +17,10 @@ package io.fusion.fusionplcdataservice.service;
 
 import io.fusion.core.FusionDataServiceConfig;
 import io.fusion.core.FusionDataServiceConfig.FieldSpec;
-import io.fusion.core.MetricsPullService;
-import io.fusion.fusionplcdataservice.exception.ConnectionException;
-import io.fusion.fusionplcdataservice.exception.JobNotFoundException;
-import io.fusion.fusionplcdataservice.exception.ReadException;
+import io.fusion.core.exception.ConnectionException;
+import io.fusion.core.exception.JobNotFoundException;
+import io.fusion.core.exception.ReadException;
+import io.fusion.core.source.MetricsPullService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.plc4x.java.PlcDriverManager;
 import org.apache.plc4x.java.api.exceptions.PlcConnectionException;
@@ -53,14 +53,14 @@ public class PlcDataService implements MetricsPullService {
     @Override
     public Map<String, String> getMetrics(String jobId) {
         log.info("Fetching metrics for job {}", jobId);
+        var jobSpec = fusionDataServiceConfig.getJobSpecs().get(jobId);
+        if (jobSpec == null) {
+            throw new JobNotFoundException();
+        }
         Map<String, String> data = new HashMap<>();
         try (var plcConnection = plcDriverManager.getConnection(
                 fusionDataServiceConfig.getConnectionString())) {
             // First check we have a configuration for the given job id.
-            var jobSpec = fusionDataServiceConfig.getJobSpecs().get(jobId);
-            if (jobSpec == null) {
-                throw new JobNotFoundException();
-            }
             final List<FieldSpec> fieldSpecs =
                     jobSpec.getFields();
             if (fieldSpecs == null) {
