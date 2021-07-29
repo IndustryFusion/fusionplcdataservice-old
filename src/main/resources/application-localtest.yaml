@@ -14,6 +14,11 @@
 server:
   error:
     include-stacktrace: never
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 25
 
 fusiondataservice:
   name: Filteranlage
