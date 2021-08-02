@@ -51,13 +51,13 @@ public class PlcDataService implements MetricsPullService {
     }
 
     @Override
-    public Map<String, String> getMetrics(String jobId) {
+    public Map<String, Object> getMetrics(String jobId) {
         log.info("Fetching metrics for job {}", jobId);
         var jobSpec = fusionDataServiceConfig.getJobSpecs().get(jobId);
         if (jobSpec == null) {
             throw new JobNotFoundException();
         }
-        Map<String, String> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try (var plcConnection = plcDriverManager.getConnection(
                 fusionDataServiceConfig.getConnectionString())) {
             // First check we have a configuration for the given job id.
@@ -81,7 +81,7 @@ public class PlcDataService implements MetricsPullService {
             for (String fieldName : readResponse.getFieldNames()) {
                 var responseCode = readResponse.getResponseCode(fieldName);
                 if (responseCode == PlcResponseCode.OK) {
-                    data.put(fieldName, readResponse.getObject(fieldName).toString());
+                    data.put(fieldName, readResponse.getObject(fieldName));
                 } else {
                     log.warn("Plc response for field {}: {}", fieldName, responseCode);
                 }
