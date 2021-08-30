@@ -51,7 +51,8 @@ public class PlcDataService implements MetricsPullService {
         // We're using the cached version of the PlcDriverManager (This keeps the connection open)
         this.plcDriverManager = new PlcDriverManager();
         this.connString = fusionDataServiceConfig.getConnectionString();
-        this.cachedDriverManager = new CachedDriverManager(connString, () -> plcDriverManager.getConnection(connString));
+        this.cachedDriverManager = new CachedDriverManager(
+        connString, () -> plcDriverManager.getConnection(connString));
     }
 
     @Override
