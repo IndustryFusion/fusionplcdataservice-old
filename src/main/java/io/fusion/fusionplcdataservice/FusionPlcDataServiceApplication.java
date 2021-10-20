@@ -24,7 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @ComponentScan("io.fusion")
 @EnableScheduling
-@PropertySource("classpath:default.yaml")
+@PropertySource("classpath:default.properties")
 public class FusionPlcDataServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(FusionPlcDataServiceApplication.class, args);
