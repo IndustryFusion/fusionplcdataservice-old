@@ -27,7 +27,7 @@ import org.apache.plc4x.java.api.exceptions.PlcConnectionException;
 import org.apache.plc4x.java.api.messages.PlcReadRequest;
 import org.apache.plc4x.java.api.messages.PlcReadResponse;
 import org.apache.plc4x.java.api.types.PlcResponseCode;
-import org.apache.plc4x.java.utils.connectionpool.PooledPlcDriverManager;
+import org.apache.plc4x.java.utils.connectionpool2.CachedDriverManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -41,13 +41,18 @@ import java.util.Map;
 @Primary
 public class PlcDataService implements MetricsPullService {
     private final PlcDriverManager plcDriverManager;
+    private final PlcDriverManager cachedDriverManager;
     private final FusionDataServiceConfig fusionDataServiceConfig;
+    private final String connString;
 
     @Autowired
     public PlcDataService(FusionDataServiceConfig fusionDataServiceConfig) {
         this.fusionDataServiceConfig = fusionDataServiceConfig;
-        // We're using the pooled version of the PlcDriverManager (This keeps the connection open)
-        this.plcDriverManager = new PooledPlcDriverManager();
+        // We're using the cached version of the PlcDriverManager (This keeps the connection open)
+        this.plcDriverManager = new PlcDriverManager();
+        this.connString = fusionDataServiceConfig.getConnectionString();
+        this.cachedDriverManager = new CachedDriverManager(
+        connString, () -> plcDriverManager.getConnection(connString));
     }
 
     @Override
@@ -58,8 +63,7 @@ public class PlcDataService implements MetricsPullService {
             throw new JobNotFoundException();
         }
         Map<String, Object> data = new HashMap<>();
-        try (var plcConnection = plcDriverManager.getConnection(
-                fusionDataServiceConfig.getConnectionString())) {
+        try (var plcConnection = cachedDriverManager.getConnection(connString)) {
             // First check we have a configuration for the given job id.
             final List<FieldSpec> fieldSpecs =
                     jobSpec.getFields();
